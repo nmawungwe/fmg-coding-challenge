@@ -3,16 +3,24 @@ angular.module('mainController',['authServices'])
     // console.log('Testing testing')
     var app =this;
 
+    app.loadme = false;
+
     $rootScope.$on('$routeChangeStart',function(){
+
         if(Auth.isLoggedIn()){
-            console.log('Success: User logged in.');
+            app.isLoggedIn = true;
             Auth.getUser().then(function(data){
-                console.log(data.data.username);
+                app.firstname=data.data.firstname;
+                app.surname=data.data.surname;
                 app.username=data.data.username;
+                 app.useremail=data.data.email;
+                 app.color=data.data.color;
+                 app .loadme=true;
             });
         } else{
-            console.log('Failure: User is NOT logged in.');
+            app.isLoggedIn = false;
             app.username='';
+            app.loadme=true;
         }
     });
 
@@ -30,6 +38,8 @@ this.doLogin  = function(loginData){
              // redirect to home page
              $timeout(function(){
                 $location.path('/about');
+                app.loginData = '';
+                app.successMsg= false;
              },2000);
         } else {
              // create error message
