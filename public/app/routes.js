@@ -35,12 +35,20 @@ var app = angular.module('appRoutes', ['ngRoute'])
         authenticated: true
     })
 
+    .when('/activate/:token',{
+        templateUrl: 'app/views/pages/users/activation/activate.html',
+        controller: 'emailCtrl',
+        controllerAs: 'email'
+    })
+
     .otherwise({redirectTo: '/'} );
    
     $locationProvider.html5Mode({
         enabled: true,
         requireBase: false
       });
+
+      
 
 });    
 

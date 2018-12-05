@@ -1,5 +1,5 @@
 <div class "page-header">
-    <h1> {{main.username}}'s Profile</h1>
+    <h1> {{main.firstname}}'s Profile</h1>
 </div>
 <div class="panel panel-info">
     <!--Defaul panel contents-->
@@ -7,13 +7,19 @@
 <!---Table-->
 <table class="table">
     <tr>
+        <td><strong>Firstname</strong></td>
+        <td><strong>Surname</strong></td>
         <td><strong>Username</strong></td>
         <td><strong>Email</strong></td>
+        <td><strong>Favorite color</strong></td>
         
     </tr>
     <tr>
+        <td>{{main.firstname}}</td>
+        <td>{{main.surname}}</td>
         <td>{{main.username}}</td>
         <td>{{main.useremail}}</td>
+        <td>{{main.color}}</td>
     </tr>
 </table>
 </div>

@@ -5,27 +5,29 @@
 <form ng-submit="register.regUser(regData);">
 <!--Firstname--->
 <label>Firstname:</label>
-<input class="form-control" type="text" name="firstname" placeholder="please enter firstname" ng-model="register.regData.firstname"> 
+<input class="form-control" type="text" name="firstname" placeholder="please enter firstname" ng-model="register.regData.firstname" required> 
 <br>
 <!--Surname--->
 <label>Surname:</label>
-<input class="form-control" type="text" name="surname" placeholder="please enter surname" ng-model="register.regData.surname"> 
+<input class="form-control" type="text" name="surname" placeholder="please enter surname" ng-model="register.regData.surname" required> 
 <br>
 <!--Email--->
 <label>Email:</label>
-<input class="form-control" type="text" name="email" placeholder="please enter email" ng-model="register.regData.email"> 
+<input class="form-control" type="text" name="email" placeholder="please enter email" ng-model="register.regData.email" required> 
 <br>
 <!--Username--->
 <label>Username:</label>
-<input class="form-control" type="text" name="username" placeholder="please enter username" ng-model="register.regData.username"> 
-<br>
+<input class="form-control" type="text" name="username" placeholder="please enter username" ng-model="register.regData.username" ng-blur="register.checkUsername(regData);" required> 
+<p class="help-block" ng-show = "(!regForm.username.$pristine && regForm.username.$error.required) || (regForm.$submitted && regForm.username.$error.required)">This field is required</p>
+<p class="help-block" ng-show = "register.usernameMsg">{{register.usernameMsg}}</p>
+<br> 
 <!--Password--->
 <label>Password:</label>
-<input class="form-control" type="password" name="password" placeholder="please enter password" ng-model="register.regData.password"> 
+<input class="form-control" type="password" name="password" placeholder="please enter password" ng-model="register.regData.password" required> 
 <br>
 <!--Color--->
 <label>Color:</label>
-<input class="form-control" type="text" name="color" placeholder="please enter favorite color" ng-model="register.regData.color"> 
+<input class="form-control" type="text" name="color" placeholder="please enter favorite color" ng-model="register.regData.color" required> 
 <br>  
 <button class="btn btn-primary" type="submit">Register</button>
 </form>

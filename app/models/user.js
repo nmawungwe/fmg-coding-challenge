@@ -8,12 +8,15 @@ var UserSchema = new Schema({
     email: { type: String, lowercase: true, require: true, unique: true},
     username: { type: String, require: true, unique: true},
     password: { type: String, require: true},
-    color: { type: String, require: true}
+    color: { type: String, require: true},
+    active: {type: Boolean, required:true, default:false},
+    temporarytoken: {type: String, required: true}
 });
 
 UserSchema.pre('save', function (next) {
     var user = this;
-    bcrypt.hash(user.password, null, null, function(err, hash){
+    var salt = bcrypt.genSaltSync(10);
+    bcrypt.hash(user.password, salt, null, function(err, hash){
         if (err) return next(err);
         user.password=hash;
         next();

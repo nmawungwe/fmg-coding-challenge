@@ -18,7 +18,7 @@ app.use('/api',appRoutes);
 //http://localhost:8080/api/users
 
 
-mongoose.connect('mongodb://localhost:27017/tutorial', function(err){
+mongoose.connect('mongodb://localhost:27017/fmg', function(err){
     if(err){
         console.log('Not connected to the database:'+ err);
     } else{

@@ -25,6 +25,7 @@
 <!--Angular Controllers-->
     <script src="app/controllers/userCtrl.js"></script> 
     <script src="app/controllers/mainCtrl.js"></script>
+    <script src="app/controllers/emailCtrl.js"></script>
 
 <!--Angular Services-->
     <script src="app/services/userServices.js"></script>
@@ -69,7 +70,7 @@
                 <li><a href="#">One more separated link</a></li>
               </ul>
             </li>
-            <li><a ng-show="main.isLoggedIn" href="/profile">Hello {{main.username}}</a></li>
+            <li><a ng-show="main.isLoggedIn" href="/profile">{{main.firstname}}'s profile</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
