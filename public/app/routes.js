@@ -41,6 +41,14 @@ var app = angular.module('appRoutes', ['ngRoute'])
         controllerAs: 'email'
     })
 
+    .when('/resetpassword',{
+        templateUrl:'/app/views/pages/users/reset/password.html',
+        controller: 'passwordCtrl',
+        controllerAs: 'password',
+        authenticated: false
+    })
+    
+
     .otherwise({redirectTo: '/'} );
    
     $locationProvider.html5Mode({

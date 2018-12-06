@@ -92,7 +92,7 @@ router.post('/checkemail', function(req, res){
 //User login route 
 //http://locahost:port/api/authenticate
 router.post('/authenticate', function(req, res){
-    User.findOne({username:req.body.username}).select('email username password').exec(function(err,user){
+    User.findOne({username:req.body.username}).select('email username password active ').exec(function(err,user){
         if (err) throw err;
         console.log("login body", req.body);
         let validPassword = user.comparePassword(req.body.password );
@@ -104,12 +104,13 @@ router.post('/authenticate', function(req, res){
         } else if  (user){
             if(req.body.password){
                 //var validPassword = user.comparePassword(req.body.password );
-            }else{
+            }else {
                 res.json({success: false, message:'No password provided'});
-            } 
-                  
+            }     
             if(!validPassword){
                 res.json({success: false, message:'Could not authenticate password'});
+            } else if (!user.active){
+                res.json({success: false, message: 'Acoount is not yet activated.Please check your email'});
             } else { 
                 var token = jwt.sign({firstname: user.firstname, surname: user.surname, email: user.email, username: user.username, color: user.color}, secret, { expiresIn: '24h'});
                  res.json({success:true, message:' User authenticated!', token: token});
@@ -117,6 +118,10 @@ router.post('/authenticate', function(req, res){
         }
     });
 });
+
+router.get('/resetpassword', function(req, res){
+    
+})
 
 router.put('/activate/:token', function(req,res){
     User.findOne({temporarytoken: req.params.token}, function(err,user){

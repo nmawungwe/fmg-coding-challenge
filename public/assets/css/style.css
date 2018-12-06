@@ -8,6 +8,10 @@ header .navbar 		{
 	border-radius:0;
 }
 
+.reset{
+	float: right;
+}
+
 /* NGANIMATE
 ====================== */
 
