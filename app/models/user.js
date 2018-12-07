@@ -7,7 +7,7 @@ var UserSchema = new Schema({
     surname: { type: String,  require: true},
     email: { type: String, lowercase: true, require: true, unique: true},
     username: { type: String, require: true, unique: true},
-    password: { type: String, require: true},
+    password: { type: String, minlength: 5, require: true},
     color: { type: String, require: true},
     active: {type: Boolean, required:true, default:false},
     temporarytoken: {type: String, required: true}

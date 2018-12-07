@@ -35,15 +35,15 @@ router.post('/users', function(req,res){
         user.save(function(err){
             if (err) {
                 console.log(err)
-                res.json({success: false, message:'Username or Email already exists!', error: err});
+                res.json({success: false, message:'Username or Email already exists! Also ensure your password is more than 5 characters', error: err});
             } else{
 
                 var email = {
-                    from: 'Localhost Staff, staff@localhost.com',
+                    from: 'Nyasha Mawungwe, nyasha@localhost.com',
                     to: user.email,
-                    subject: 'Localhost Activation Link',
+                    subject: 'FMG development challenge activation link',
                     text: 'Hello ' + user.firstname + ',Thank you for registering at localhost.com. Please click on the following link to complete your activation:"http://localhost:8080/activate/' + user.temporarytoken,
-                    html: 'Hello<strong> ' + user.firstname + '</strong>,<br><br>Thank you for registering at localhost.com. Please click on the link below to complete your activation:<br><br><a href="http://localhost:8080/activate/' + user.temporarytoken + '">http://localhost:8080/activate</a>'
+                    html: 'Hello<strong> ' + user.firstname + '</strong>,<br><br>Thank you for registering at FMG development challenge. Please click on the link below to complete your activation:<br><br><a href="http://localhost:8080/activate/' + user.temporarytoken + '">http://localhost:8080/activate</a>'
                   };
                   
                   client.sendMail(email, function(err, info){
@@ -88,6 +88,9 @@ router.post('/checkemail', function(req, res){
         }
     })
 });
+
+
+
 
 //User login route 
 //http://locahost:port/api/authenticate
@@ -141,9 +144,9 @@ router.put('/activate/:token', function(req,res){
                 console.log(err);
             } else {
                 var email = {
-                    from: 'Localhost Staff, staff@localhost.com',
+                    from: 'Nyasha Mawungwe, nyasha@localhost.com',
                     to: user.email,
-                    subject: 'Localhost Account Activated',
+                    subject: 'FMG development challenge Account Activated',
                     text: 'Hello ' + user.firstname + ',Your account has been successfully activated!',
                     html: 'Hello<strong> ' + user.firstname + '</strong>,<br><br>Your account has been successfully activated!'
                   };
