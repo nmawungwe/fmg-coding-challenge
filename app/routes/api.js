@@ -122,8 +122,38 @@ router.post('/authenticate', function(req, res){
     });
 });
 
-router.get('/resetpassword', function(req, res){
-    
+router.get('/resetusername/:email', function(req, res){
+    User.findOne({email: req.params.email}).select('email firstname username' ).exec(function(err, user) {
+        if(err){
+            res.json({success: false, message: err});
+        } else {
+            if(!req.params.email){
+                res.json({success: false, message:'No e-mail provided'});
+            } else{
+                if(!user){
+                    res.json({success: false, message:'E-mail not found'}); 
+                } else {
+                    var email = {
+                        from: 'Nyasha Mawungwe, nyasha@localhost.com',
+                        to: user.email,
+                        subject: 'FMG username request',
+                        text: 'Hello ' + user.firstname + 'You recently requested your username please save it in your file' + user.username,
+                        html: 'Hello<strong> ' + user.firstname + '</strong>,<br><br>You recently requested your username please save it in your file ' + user.username
+                      };
+                            client.sendMail(email, function(err, info){
+                          if (err ){
+                            console.log(err);
+                          }
+                          else {
+                            console.log('Message sent: ' + info.response);
+                          }
+                      });
+                    res.json({success: true, messsage: 'Username has been sent to e-mail!'})
+                }
+            }
+            
+        }
+    })
 })
 
 router.put('/activate/:token', function(req,res){
