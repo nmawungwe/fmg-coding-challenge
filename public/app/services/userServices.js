@@ -21,6 +21,11 @@ angular.module('userServices',[])
     userFactory.activateAccount = function(token){
         return $http.put('/api/activate/'+ token);
     }
+
+    //User.sendUsername(userData);
+    userFactory.sendUsername = function(userData){
+        return $http.get('/api/resetusername/' + userData);
+    };
     
     return userFactory;
 }); 
