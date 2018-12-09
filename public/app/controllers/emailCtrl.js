@@ -38,7 +38,7 @@ app = this
     User.sendUsername(app.userData.email).then(function(data){
         app.loading = false;
         if (data.data.success){ 
-    app.successMsg = data.data.message;
+    app.successMsg = (data.data.message);
         } else {
             app.disabled = false;
             app.errorMsg = data.data.message;
