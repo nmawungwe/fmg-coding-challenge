@@ -154,7 +154,85 @@ router.get('/resetusername/:email', function(req, res){
             
         }
     })
-})
+});
+
+router.put('/resetpassword', function(req, res){
+User.findOne({username: req.body.username}).select('username active email firstname resettoken').exec(function(err, user){
+    if (err) throw err;
+    if (!user){
+        res.json({success: false, message: 'Username not found'});
+    }else if(!user.active){
+        res.json({ success: false, message: 'Account has not been activated yet'});
+    } else {
+        user.resettoken= jwt.sign({ email: user.email, username: user.username}, secret, { expiresIn: '24h'}); 
+        user.save(function(err){
+            if(err){
+                res.json({success: false, message: err});
+            } else { 
+                var email = {
+                    from: 'Nyasha Mawungwe, nyasha@localhost.com',
+                    to: user.email,
+                    subject: 'FMG reset password request',
+                    text: 'Hello ' + user.firstname + 'You recently requested a reset password link. Please click on the link to reset your password: http://localhost:8080/reset/' + user.resettoken,
+                    html: 'Hello<strong> ' + user.firstname + '</strong>,<br><br>You recently requested a reset password link. Please click on the link below to your password.<br><br><a href="http://localhost:8080/reset/' + 
+                    user.resettoken +'">http://localhost:8080/reset/<a>' 
+                  };
+                        client.sendMail(email, function(err, info){
+                      if (err ) console.log(err);
+                      });
+                        res.json({success: true, message: 'Please check your email for password reset link'});
+            }
+        })
+    }
+});
+});
+
+router.get('/resetpassword/:token', function(req, res){
+    User.findOne({resettoken: req.params.token}).select().exec(function(err, user){
+        if(err) throw err;
+        var token = req.params.token;
+        //function to verify token
+            jwt.verify(token, secret, function(err, decoded){
+            if(err){
+            res.json({success: false, message:'Password link has expired'});
+            } else {
+                    if(!user){
+                        res.json({success: false, message: 'Password link has expired'});
+                    } else {
+                        res.json({ success: true, user: user})
+                    }
+    } 
+    });
+});
+});
+
+router.put('/savepassword', function(req, res){
+    User.findOne({username: req.body.username}).select('username email firstname resettoken').exec(function(err, user){
+        if(err) throw err;
+        if(req.body.password == null || req.body.password ==''){
+        res.json({success:false, message: 'Password not provided'});  
+        }else{     
+            user.password = req.body.password;
+            user.resettoken = false;
+            user.save(function(err){
+           if (err) {res.json({success: false, message: err})
+           }else{                 
+            var email = {
+            from: 'Nyasha Mawungwe, nyasha@localhost.com',
+            to: user.email,
+            subject: 'FMG reset password',
+            text: 'Hello ' + user.firstname + 'This email is to notify you that your password was recently reset at FMG localhost.com',
+            html: 'Hello<strong> ' + user.firstname + '</strong>,<br><br> This email is to notify you that your password was recently reset at FMG localhost.com'
+          };
+                client.sendMail(email, function(err, info){
+              if (err ) console.log(err);
+              }); 
+               res.json({success: true, message: 'Password has been reset!'});
+           }
+            });           
+        }
+    });
+});
 
 router.put('/activate/:token', function(req,res){
     User.findOne({temporarytoken: req.params.token}, function(err,user){

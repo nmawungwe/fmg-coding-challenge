@@ -10,7 +10,8 @@ var UserSchema = new Schema({
     password: { type: String, minlength: 5, require: true},
     color: { type: String, require: true},
     active: {type: Boolean, required:true, default:false},
-    temporarytoken: {type: String, required: true}
+    temporarytoken: {type: String, required: true},
+    resettoken: {type: String, required: false}
 });
 
 UserSchema.pre('save', function (next) {
