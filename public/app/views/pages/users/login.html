@@ -5,17 +5,20 @@
         <body>       
             <div alig class="Login Area">
                 <form ng-submit="main.doLogin(loginData);">
-                    <div class="videowrapper">
-                            <iframe src="https://www.youtube.com/embed/GOGXA1eA8Wg?controls=0" frameborder="0" allow="accelerometer; autoplay ; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                        <br>
-                    <div><h1>User Login</h1></div>
+                <vg-player>
+                    <vg-play-pause></vg-play-pause>   
+                    <video autoplay muted loop id="myVideo">
+                            <source src="http://static.videogular.com/assets/videos/videogular.mp4" type="video/mp4">
+                          </video>
+                </vg-player>
+                
+                    <div><h1><font color="white">User Login</font></h1></div>
                     <!--Username--->
-                    <label>Username:</label>
+                    <label><font color="white">Username:</font></label>
                     <input class="form-control" type="text" name="username" placeholder="please enter username" ng-model="main.loginData.username"> 
                     <br>
                     <!--Password--->
-                    <label>Password:</label>
+                    <label><font color="white">Password:</font></label>
                     <input class="form-control" type="password" name="password" placeholder="please enter password" ng-model="main.loginData.password"> 
                     <br>
                     <button class="btn btn-primary" type="submit">Login</button>&nbsp
