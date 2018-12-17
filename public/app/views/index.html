@@ -65,9 +65,46 @@
   
     <div class="container theme-showcase" role="main">
       <div ng-view></div>
-  
-    </div> <!-- /container -->  
-  
+
+        
+          <!-- Modal -->
+          <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+            
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" ng-click="main.endSession();" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">{{main.modalHeader}}</h4>
+                </div>
+                <div class="modal-body">
+                <p>{{main.modalBody}}</p>
+
+                <div ng-show="main.hideButton" class="sk-fading-circle">
+                    <div ng-show="main.hideButton" class="sk-circle1 sk-circle"></div>
+                    <div ng-show="main.hideButton" class="sk-circle2 sk-circle"></div>
+                    <div ng-show="main.hideButton" class="sk-circle3 sk-circle"></div>
+                    <div ng-show="main.hideButton" class="sk-circle4 sk-circle"></div>
+                    <div ng-show="main.hideButton" class="sk-circle5 sk-circle"></div>
+                    <div ng-show="main.hideButton" class="sk-circle6 sk-circle"></div>
+                    <div ng-show="main.hideButton" class="sk-circle8 sk-circle"></div> 
+                    <div ng-show="main.hideButton" class="sk-circle9 sk-circle"></div> 
+                    <div ng-show="main.hideButton" class="sk-circle10 sk-circle"></div> 
+                    <div ng-show="main.hideButton" class="sk-circle11 sk-circle"></div> 
+                    <div ng-show="main.hideButton" class="sk-circle12 sk-circle"></div> 
+                    <div ng-show="main.hideButton" class="sk-circle13 sk-circle"></div> 
+                    <div ng-show="main.hideButton" class="sk-circle14 sk-circle"></div>  
+                  </div>
+                <div class="modal-footer">
+                  <button type="button" ng-hide="main.hideButton" ng-click="main.renewSession();" class="btn btn-primary" data-dismiss="modal">Yes</button>
+                  <button type="button" ng-hide="main.hideButton" ng-click="main.endSession();" class="btn btn-danger" data-dismiss="modal">No</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        
   
     <!-- Bootstrap core JavaScript
     ================================================== -->

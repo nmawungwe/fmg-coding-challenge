@@ -1,12 +1,106 @@
-angular.module('mainController',['authServices'])
-.controller('mainCtrl', function(Auth, $timeout,$location,$rootScope){
+angular.module('mainController',['authServices', 'userServices'])
+.controller('mainCtrl', function(Auth, $timeout,$location,$rootScope,$interval,$window,$route,User,AuthToken){
     // console.log('Testing testing')
     var app =this;
-
     app.loadme = false;
 
-    $rootScope.$on('$routeChangeStart',function(){
+    app.checkSession = function(){
+         if (Auth.isLoggedIn()){
+              app.checkingSession = true;
+              var interval = $interval(function(){ 
+                var token = $window.localStorage.getItem('token'); 
+                if (token === null){
+                    $interval.cancel(interval);
+                } else {
+                    self.parseJwt = function(token){
+                        var base64Url = token.split('.')[1];
+                        var base64 = base64Url.replace('-', '+').replace('_', '/');
+                        return JSON.parse($window.atob(base64));
+                    }
+                    var expireTime = self.parseJwt(token);
+                    var timeStamp = Math.floor(Date.now()/1000);
+                    console.log(expireTime.exp);
+                    console.log(timeStamp); 
+                    var timeCheck = expireTime.exp - timeStamp;
+                    console.log('timeCheck:' + timeCheck); 
+                    if (timeCheck <= 10){
+                        console.log('token has expired');
+                        showModal(1);
+                        $interval.cancel(interval);
+                    } else {
+                        console.log('token has not yet expired');
+                    }
 
+                }
+                 
+              }, 10000);
+         }
+          
+    };
+
+    app.checkSession();
+
+    var showModal = function(option){
+        app.choiceMade = false;
+        app.modalHeader = undefined;
+        app.modalBody = undefined;
+        app.hideButton = false;
+
+ 
+         if(option === 1){
+            app.modalHeader = 'Timeout Warning';
+            app.modalBody = 'Your session will expire in 5 mins. Would you like to renew your session?';
+            $("#myModal").modal({backdrop: "static"});
+         } else if (option === 2){
+             //Logout option
+            app.hideButton = true;
+            app.modalHeader = 'Logging Out';
+            $("#myModal").modal({backdrop: "static"});
+            $timeout(function(){
+                Auth.logout();
+                $location.path('/');
+                hideModal();
+                $route.reload();
+            }, 3000);
+         }
+         $timeout(function(){
+            if (!app.choiceMade){;
+                hideModal();
+            }
+        }, 4000);
+    };
+
+        app.renewSession = function(){
+        app.choiceMade = true;
+        User.renewSession(app.username).then(function(data){
+            if(data.data.success){
+                AuthToken.setToken(data.data.token);
+                app.checkSession();
+            }else{
+                app.modalBody = data.data.message;
+            }
+    })
+        hideModal();
+    };
+
+    app.endSession = function(){
+        app.choiceMade = true;
+        hideModal();
+        $timeout(function(){
+            showModal(2)
+        }, 1000);
+    };
+
+
+    var hideModal = function(){
+    $("#myModal").modal('hide');
+    };
+
+    //will run code every time a route changes 
+    $rootScope.$on('$routeChangeStart',function(){
+        if(!app.checkSession) app.checkSession();
+        
+        
         if(Auth.isLoggedIn()){
             app.isLoggedIn = true;
             Auth.getUser().then(function(data){
@@ -41,6 +135,7 @@ this.doLogin  = function(loginData){
                 $location.path('/about');
                 app.loginData = '';
                 app.successMsg= false;
+                app.checkSession();
              },2000);
         } else {
              // create error message
@@ -51,11 +146,7 @@ this.doLogin  = function(loginData){
 }; 
 
 this.logout=function(){
-    Auth.logout();
-    $location.path('/logout');
-    $timeout(function() {
-        $location.path('/');
-    },2000);
+    showModal(2); 
 };
 
 });

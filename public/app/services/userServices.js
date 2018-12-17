@@ -40,6 +40,12 @@ angular.module('userServices',[])
     //User.savePassword(regData);
     userFactory.savePassword = function(regData){
         return $http.put('/api/savepassword', regData)
+    };
+
+    //User.renewSession(username)
+    userFactory.renewSession = function(username){
+        return $http.get('/api/renewToken/' + username);
     }
-    return userFactory;// Return userFactory object
+
+        return userFactory;// Return userFactory object
 }); 
