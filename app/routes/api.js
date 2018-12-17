@@ -115,8 +115,8 @@ router.post('/authenticate', function(req, res){
             } else if (!user.active){
                 res.json({success: false, message: 'Acoount is not yet activated.Please check your email'});
             } else { 
-                var token = jwt.sign({firstname: user.firstname, surname: user.surname, email: user.email, username: user.username, color: user.color}, secret, { expiresIn: '24h'});
-                 res.json({success:true, message:' User authenticated!', token: token});
+                var token = jwt.sign({firstname: user.firstname, surname: user.surname, email: user.email, username: user.username, color: user.color}, secret, { expiresIn: '120s'});
+                res.json({success:true, message:' User authenticated!', token: token});
             }
         }
     });
@@ -302,10 +302,22 @@ router.post('/me', function(req,res){
         if (err) return res.status(500).send({success: false, error: err});
         res.send(user);
     })
-    //res.send(req.decoded);
-    
+    //res.send(req.decoded);    
 });
-return router;
+
+router.get('/renewToken/:username', function(req, res){
+    User.findOne({username: req.params.username}).select().exec(function(err, user){
+        if (err) throw err;
+        if (!user){
+            res.json({success: false, message: 'No user was found'});
+        } else {
+            var newToken = jwt.sign({firstname: user.firstname, surname: user.surname, email: user.email, username: user.username, color: user.color}, secret, { expiresIn: '24h'});
+            res.json({success:true, token: newToken}); 
+        }
+    })
+})
+
+return router; // Return the router object to the server 
 }
 
   
