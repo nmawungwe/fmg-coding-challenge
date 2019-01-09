@@ -1,3 +1,9 @@
+<script src="app/controllers/mainCtrl.js"></script>
+<script type="text/javascript" src = "app/directives/fileModel.js"></script>
+<script type="text/javascript" src = "app/services/uploadFileService.js"></script>
+
+
+
 <div class "page-header">
     <h1> {{main.firstname}}'s Profile</h1>
 </div>
@@ -22,4 +28,37 @@
         <td>{{main.color}}</td>
     </tr>
 </table>
+
+<div class="well">
+
+        <div ng-show="uploading" class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                <span class="sr-only"></span>
+              </div>
+        <br>
+        
+        <form ng-submit="Submit();">
+        <label class="btn btn-success">
+                Browse
+        <input type="file" file-model="file.upload" name="myfile" ng-disabled="uploading" style="display: none;">
+        </label>
+        <br> 
+        <br>  
+        <button class="btn btn-primary" ng-disabled="uploading">Upload</button>
+        
+        </form>
+        
+        <br>
+        
+         <img class="mythumbnail" ng-src="{{ thumbnail.dataUrl || 'https://i.stack.imgur.com/l60Hf.png'}}">
+         <br>
+         <br>
+        
+         <div ng-show="message">
+        
+            <div ng-class="alert">{{message}}</div>
+        
+         </div> 
+
+
 </div>
