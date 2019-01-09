@@ -315,7 +315,8 @@ router.get('/renewToken/:username', function(req, res){
             res.json({success:true, token: newToken}); 
         }
     })
-})
+});
+
 
 return router; // Return the router object to the server 
 }

@@ -1,8 +1,26 @@
-angular.module('mainController',['authServices', 'userServices'])
-.controller('mainCtrl', function(Auth, $timeout,$location,$rootScope,$interval,$window,$route,User,AuthToken){
+angular.module('mainController',['authServices', 'userServices','fileModelDirective','uploadFileService'])
+.controller('mainCtrl', function(Auth, $timeout,$location,$rootScope,$interval,$window,$route,User,AuthToken,$scope,uploadFile){   
     // console.log('Testing testing')
     var app =this;
     app.loadme = false;
+    $scope.file = {};
+    
+    $scope.Submit = function(){
+        $scope.uploading = true;
+        uploadFile.upload($scope.file).then(function(data){
+            if (data.data.success){
+                $scope.uploading = false;
+                $scope.alert='alert alert-success';
+                $scope.message = data.data.message;
+                $scope.file = {}; 
+            } else {
+                $scope.uploading = false;
+                $scope.alert = 'alert alert-danger';
+                $scope.message = data.data.message;
+                $scope.file = {}; 
+            }
+        }) 
+    };
 
     app.checkSession = function(){
          if (Auth.isLoggedIn()){
