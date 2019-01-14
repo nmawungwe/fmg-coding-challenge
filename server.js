@@ -9,9 +9,10 @@ var appRoutes =require('./app/routes/api')(router);
 var path = require('path');
 var passport = require('passport');
 var social = require('./app/passport/passport')(app, passport);
-var multer  = require('multer')
+var multer  = require('multer');
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
+    console.log('Trying to upload some files');        
       cb(null, './uploads/images/');
     },
     filename: function (req, file, cb) {
@@ -20,7 +21,7 @@ var storage = multer.diskStorage({
             err.code = 'filetype';
             return cb(err);
         }else{
-            cb(null, Date.now() + '_' + file.originalname); 
+            cb (null, Date.now() + '_' + file.originalname); 
         }
         }   
   });
@@ -37,6 +38,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 app.use(express.static(__dirname +'/public'));
 app.use('/api',appRoutes);
 
+
 //http://localhost:8080/api/users
 
 
@@ -47,6 +49,7 @@ mongoose.connect('mongodb://localhost:27017/fmg', function(err){
         console.log('Successfully connected to MongoDB');
     }
 });
+
 
 
 
@@ -61,7 +64,7 @@ app.post('/upload', function (req, res) {
             console.log(err);
             res.json({success: false, message: 'File was not able to be uploaded'});
     }
-} else {  
+} else { 
     if(!req.file){
         res.json({success: false, message: 'No file was selected'});
     } else {
