@@ -6,8 +6,8 @@ angular.module('mainController',['authServices', 'userServices','fileModelDirect
     $scope.file = {};
     
     $scope.Submit = function(){
-        $scope.uploading = true;
-        uploadFile.upload($scope.file).then(function(data){
+                $scope.uploading = true;
+                uploadFile.upload($scope.file).then(function(data){
             if (data.data.success){
                 $scope.uploading = false;
                 $scope.alert='alert alert-success';
